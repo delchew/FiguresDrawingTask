@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace FiguresCommon
+namespace FiguresDrawing.Figures
 {
     public abstract class Figure
     {
@@ -9,15 +9,11 @@ namespace FiguresCommon
 
         public double Width { get; set; }
 
-        public string Title { get; set; }
-
         public Color BodyColor { get; set; }
 
         public Color StrokeColor { get; set; }
 
         public double StrokeThickness { get; set; }
-
-        public abstract void Draw(object drawingPlace);
 
         private double _scale;
         public double Scale
@@ -33,17 +29,14 @@ namespace FiguresCommon
             }
         }
 
+        public abstract void Draw(object drawingPlace);
+
         public Figure()
         {
             Scale = 1;
             StrokeThickness = 0;
-            BodyColor = Color.White;
+            BodyColor = Color.Gray;
             StrokeColor = Color.Black;
-        }
-
-        public override string ToString()
-        {
-            return Title;
         }
     }
 }

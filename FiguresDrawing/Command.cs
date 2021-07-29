@@ -3,12 +3,12 @@ using System.Windows.Input;
 
 namespace FiguresDrawing
 {
-    public class DrawingCommand : ICommand
+    public class Command : ICommand
     {
-        private Action<object> _drawingAction;
-        public DrawingCommand(Action<object> drawingAction)
+        private readonly Action<object> _commandAction;
+        public Command(Action<object> drawingAction)
         {
-            _drawingAction = drawingAction;
+            _commandAction = drawingAction;
         }
 
         public bool CanExecute(object parameter)
@@ -24,7 +24,7 @@ namespace FiguresDrawing
 
         public void Execute(object parameter)
         {
-            _drawingAction?.Invoke(parameter);
+            _commandAction?.Invoke(parameter);
         }
     }
 }

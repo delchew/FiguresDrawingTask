@@ -1,63 +1,105 @@
-﻿using FiguresCommon;
-using FiguresDrawing.Figures;
+﻿using FiguresDrawing.Figures;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using System.Drawing;
+using System.Collections.Generic;
+using System;
+using System.Windows.Controls;
 
 namespace FiguresDrawing
 {
     public class MainWindowViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<Figure> FiguresCollection { get; set; }
+        public Dictionary<string, Func<Figure>> GenerateFigureMethodsDict = new Dictionary<string, Func<Figure>>();
+        public ObservableCollection<string> FiguresTitleCollection { get; set; }
         public object DrawingPlace { get; set; }
+
         private ICommand _drawCurrentFigureCommand;
         public ICommand DrawCurrentFigureCommand
         {
             get
             {
-                if(_drawCurrentFigureCommand == null)
+                if (_drawCurrentFigureCommand == null)
                 {
-                    _drawCurrentFigureCommand = new DrawingCommand((drawingPlace) => CurrentFigure.Draw(drawingPlace));
+                    _drawCurrentFigureCommand = new Command(DrawCurrentFigure);
                 }
                 return _drawCurrentFigureCommand;
             }
         }
 
-        public MainWindowViewModel()
+        private ICommand _clearDrawingPlaceCommand;
+        public ICommand ClearDrawingPlaceCommand
         {
-            FiguresCollection = new ObservableCollection<Figure>
+            get
             {
-                new WPFCircle
-                { 
-                    Title = "Blue stroke circle filled red",
-                    BodyColor = Color.AliceBlue,
-                    StrokeColor = Color.DarkBlue,
-                    Radius = 20,
-                    Scale = 1,
-                    StrokeThickness = 3
-                     
-                } 
-            };
+                if (_clearDrawingPlaceCommand == null)
+                {
+                    _clearDrawingPlaceCommand = new Command(parameter => (DrawingPlace as Canvas)?.Children.Clear());
+                }
+                return _clearDrawingPlaceCommand;
+            }
         }
 
-        private Figure _currentFigure;
-        public Figure CurrentFigure
+        private double _figureHeigth;
+        public double FigureHeigth
         {
-            get 
-            { 
-                if (_currentFigure == null)
-                {
-                    _currentFigure = FiguresCollection[0];
-                }
-                return _currentFigure;
-            }
+            get { return _figureHeigth; }
             set
             {
-                if (_currentFigure != null && !_currentFigure.Equals(value))
+                if (_figureHeigth != value)
                 {
-                    _currentFigure = value;
+                    _figureHeigth = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private double _figureWidth;
+        public double FigureWidth
+        {
+            get { return _figureWidth; }
+            set
+            {
+                if (_figureWidth != value)
+                {
+                    _figureWidth = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private double _figureStrokeWidth;
+        public double FigureStrokeWidth
+        {
+            get { return _figureStrokeWidth; }
+            set
+            {
+                if (_figureStrokeWidth != value)
+                {
+                    _figureStrokeWidth = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public MainWindowViewModel()
+        {
+            GenerateFigureMethodsDict.Add("Окружность", () => new Circle());
+            GenerateFigureMethodsDict.Add("Прямоугольник", () => new Rectangle());
+
+            FiguresTitleCollection = new ObservableCollection<string>(GenerateFigureMethodsDict.Keys);
+        }
+
+        private string _currentFigureTitle;
+        public string CurrentFigureTitle
+        {
+            get{ return _currentFigureTitle; }
+            set
+            {
+                if (_currentFigureTitle != value)
+                {
+                    _currentFigureTitle = value;
                     OnPropertyChanged();
                 }
             }
@@ -68,6 +110,17 @@ namespace FiguresDrawing
         public void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void DrawCurrentFigure(object drawingPlace)
+        {
+            var figure = GenerateFigureMethodsDict[CurrentFigureTitle]?.Invoke();
+            figure.Height = FigureHeigth;
+            figure.Width = FigureWidth;
+            figure.StrokeThickness = FigureStrokeWidth;
+            figure.BodyColor = System.Drawing.Color.BurlyWood;
+            figure.StrokeColor = System.Drawing.Color.Black;
+            figure.Draw(drawingPlace);
         }
     }
 

@@ -15,32 +15,63 @@ namespace FiguresDrawing
             Binding bindingDrawCommand = new Binding
             {
                 Source = _viewModel.DrawCurrentFigureCommand,
-                Mode = BindingMode.OneWay,
+                Mode = BindingMode.OneWay
             };
             drawButton.SetBinding(Button.CommandProperty, bindingDrawCommand);
 
             Binding bindingCommandParameter = new Binding
             {
                 Source = canvas,
-                Mode = BindingMode.OneWay,
+                Mode = BindingMode.OneWay
             };
             drawButton.SetBinding(Button.CommandParameterProperty, bindingCommandParameter);
 
+            Binding bindingClearCanvasCommand = new Binding
+            {
+                Source = _viewModel.ClearDrawingPlaceCommand,
+                Mode = BindingMode.OneWay
+            };
+            clearButton.SetBinding(Button.CommandProperty, bindingClearCanvasCommand);
+
             Binding bindingCollection = new Binding
             {
-                Source = _viewModel.FiguresCollection,
-                Mode = BindingMode.OneWay,
+                Source = _viewModel.FiguresTitleCollection,
+                Mode = BindingMode.OneWay
             };
             figuresBox.SetBinding(ComboBox.ItemsSourceProperty, bindingCollection);
 
-            //Binding bindingCurrentFigure = new Binding
-            //{
-            //    Source = _viewModel.CurrentFigure,
-            //    Mode = BindingMode.OneWayToSource,
-            //    Converter = new FigureToObjectConverter()
-            //};
-            //figuresBox.SetBinding(ComboBox., bindingCurrentFigure);
+            Binding bindingFigureTitle = new Binding
+            {
+                Source = _viewModel,
+                Path = new PropertyPath(nameof(_viewModel.CurrentFigureTitle)),
+                Mode = BindingMode.OneWayToSource
+            };
+            figuresBox.SetBinding(ComboBox.SelectedValueProperty, bindingFigureTitle);
+            figuresBox.SelectedIndex = 0;
 
+            Binding bindingFigureHeigth = new Binding
+            {
+                Source = _viewModel,
+                Path = new PropertyPath(nameof(_viewModel.FigureHeigth)),
+                Mode = BindingMode.OneWayToSource
+            };
+            heightSlider.SetBinding(Slider.ValueProperty, bindingFigureHeigth);
+
+            Binding bindingFigureWidth = new Binding
+            {
+                Source = _viewModel,
+                Path = new PropertyPath(nameof(_viewModel.FigureWidth)),
+                Mode = BindingMode.OneWayToSource
+            };
+            widthSlider.SetBinding(Slider.ValueProperty, bindingFigureWidth);
+
+            Binding bindingFigureStrokeWidth = new Binding
+            {
+                Source = _viewModel,
+                Path = new PropertyPath(nameof(_viewModel.FigureStrokeWidth)),
+                Mode = BindingMode.OneWayToSource
+            };
+            strokeWidthSlider.SetBinding(Slider.ValueProperty, bindingFigureStrokeWidth);
         }
     }
 }

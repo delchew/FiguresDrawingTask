@@ -2,7 +2,8 @@
 {
     public abstract class Circle : Figure
     {
-        public float Radius { get; set; }
+        public double Height { get; set; }
+        public double Width { get; set; }
         public Circle() : base()
         {
             Title = "Окружность";

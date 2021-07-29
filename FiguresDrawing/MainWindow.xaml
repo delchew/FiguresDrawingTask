@@ -5,11 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FiguresDrawing"
         mc:Ignorable="d"
-        Title="Figure Drawing" Height="450" Width="800"
+        Title="Figure Drawing" Height="500" Width="800"
         Background="LightGray">
-    <Grid>
+    <Grid DataContext="{Binding _viewModel}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="60"/>
             <RowDefinition Height="45"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -24,21 +25,78 @@
             Grid.ColumnSpan="3"
             Background="DarkGray"
             Margin="5, 5, 5, 0"/>
-        <ComboBox
-            x:Name="figuresBox"
+        <StackPanel
+            Orientation="Vertical"
             Grid.Row="1"
             Grid.Column="0"
-            Margin="5"
-            SelectedIndex="0"/>
+            Margin="5, 5, 5, 0">
+            <StackPanel
+                Orientation="Horizontal"
+                HorizontalAlignment="Left">
+                <Label Content="Высота: "/>
+                <Label Content="{Binding ElementName=heightSlider,
+                                         Path=Value,
+                                         StringFormat={}{0:f2}}"/>
+            </StackPanel>
+            <Slider
+                x:Name="heightSlider"
+                Minimum="1"
+                Maximum="100"/>
+        </StackPanel>
+        <StackPanel
+            Orientation="Vertical"
+            Grid.Row="1"
+            Grid.Column="1"
+            Margin="5, 5, 5, 0">
+            <StackPanel
+                Orientation="Horizontal"
+                HorizontalAlignment="Left">
+                <Label Content="Ширина: "/>
+                <Label Content="{Binding ElementName=widthSlider,
+                                         Path=Value,
+                                         StringFormat={}{0:f2}}"/>
+            </StackPanel>
+            <Slider
+            x:Name="widthSlider"
+            Grid.Row="1"
+            Grid.Column="1"
+            Minimum="1"
+            Maximum="100"/>
+        </StackPanel>
+        <StackPanel
+            Orientation="Vertical"
+            Grid.Row="1"
+            Grid.Column="2"
+            Margin="5, 5, 5, 0">
+            <StackPanel
+                Orientation="Horizontal"
+                HorizontalAlignment="Left">
+                <Label Content="Толщина обводки: "/>
+                <Label Content="{Binding ElementName=strokeWidthSlider,
+                                         Path=Value,
+                                         StringFormat={}{0:f2}}"/>
+            </StackPanel>
+            <Slider
+            x:Name="strokeWidthSlider"
+            Grid.Row="1"
+            Grid.Column="2"
+            Minimum="0"
+            Maximum="10"/>
+        </StackPanel>
+        <ComboBox
+            x:Name="figuresBox"
+            Grid.Row="2"
+            Grid.Column="0"
+            Margin="5"/>
         <Button
             x:Name="drawButton"
-            Grid.Row="1"
+            Grid.Row="2"
             Grid.Column="1"
             Style="{StaticResource standartButton}"
             Content="Draw figure"/>
         <Button
             x:Name="clearButton"
-            Grid.Row="1"
+            Grid.Row="2"
             Grid.Column="2"
             Style="{StaticResource standartButton}"
             Content="Clean Canvas"/>
